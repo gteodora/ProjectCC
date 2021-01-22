@@ -6,9 +6,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import javax.annotation.security.RolesAllowed;
 
-//@Configuration
-//@EnableWebSecurity
 @RestController
 public class HelloController /*extends WebSecurityConfigurerAdapter */{
 
@@ -16,11 +15,18 @@ public class HelloController /*extends WebSecurityConfigurerAdapter */{
     public String index() {
         return "Greetings from Spring Boot!";
     }
-/*
-    @Override
-    protected void configure(HttpSecurity security) throws Exception
+    @RolesAllowed("USER")
+    @RequestMapping("/api")
+    public String getUser()
     {
-      //  security.httpBasic().disable();
-    }*/
+        return "Welcome User";
+    }
+
+    @RolesAllowed({"ADMIN"})
+    @RequestMapping("/admin")
+    public String getAdmin()
+    {
+        return "Welcome Admin";
+    }
 
 }

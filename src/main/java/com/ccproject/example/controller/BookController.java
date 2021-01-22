@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/api/book")
 public class BookController {
 
     Iterable<Book> books=new ArrayList<>();

@@ -9,18 +9,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
+
 public class UserController {
     Iterable<User> users=new ArrayList<User>();
     @Autowired
     UserRepository userRepository;
 
+    @RolesAllowed({"USER","ADMIN"})
     @GetMapping("/{id}/books")
     public Set<Book> getAllReadBooks(@PathVariable String id){
         Optional<User> user=userRepository.findById(Long.parseLong(id));
@@ -31,6 +34,7 @@ public class UserController {
         return readBooks;
     }
 
+    @RolesAllowed({"ADMIN"})
     @GetMapping("/{id}")
     public  User getById(@PathVariable String id){
         //Optional<User> user=userRepository.findById(Long.parseLong(id));
@@ -39,6 +43,7 @@ public class UserController {
                 .orElseThrow(() -> new NotFoundException());
     }
 
+    @RolesAllowed({"USER","ADMIN"})
     @GetMapping("/")
     public Iterable<User> getAll(){
         users=userRepository.findAll();
@@ -46,6 +51,7 @@ public class UserController {
         return users;
     }
 
+    @RolesAllowed({"ADMIN"})
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public User addUser(@RequestBody User user){
@@ -53,6 +59,7 @@ public class UserController {
         return savedUser;
     }
 
+    @RolesAllowed({"ADMIN"})
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         userRepository.findById(id)
