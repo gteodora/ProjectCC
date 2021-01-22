@@ -1,9 +1,11 @@
 package com.ccproject.example.controller;
 
+import com.ccproject.example.errorhandling.NotFoundException;
 import com.ccproject.example.model.Book;
 import com.ccproject.example.model.User;
 import com.ccproject.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,11 +32,11 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public  Optional<User> getById(@PathVariable String id){
-        Optional<User> user=userRepository.findById(Long.parseLong(id));
-        /*if(user.isPresent())
-            return user; */
-        return user;
+    public  User getById(@PathVariable String id){
+        //Optional<User> user=userRepository.findById(Long.parseLong(id));
+        Long idLong=Long.parseLong(id);
+        return userRepository.findById(idLong)
+                .orElseThrow(() -> new NotFoundException());
     }
 
     @GetMapping("/")
@@ -45,8 +47,17 @@ public class UserController {
     }
 
     @PostMapping("/")
+    @ResponseStatus(HttpStatus.CREATED)
     public User addUser(@RequestBody User user){
         User savedUser=userRepository.save(user);
         return savedUser;
     }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        userRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+        userRepository.deleteById(id);
+    }
+
 }

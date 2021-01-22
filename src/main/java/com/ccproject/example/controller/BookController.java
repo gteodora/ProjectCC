@@ -1,9 +1,13 @@
 package com.ccproject.example.controller;
 
+
+import com.ccproject.example.errorhandling.IdMismatchException;
+import com.ccproject.example.errorhandling.NotFoundException;
 import com.ccproject.example.model.Book;
 import com.ccproject.example.model.User;
 import com.ccproject.example.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -19,13 +23,11 @@ public class BookController {
     BookRepository bookRepository;
 
     @GetMapping("/{id}")
-    public Optional<Book> getById(@PathVariable String id){
+    public Book getById(@PathVariable String id){
         Long idLong=Long.parseLong(id);
-        Optional<Book> book=bookRepository.findById(idLong);
-        if(book.isPresent()){
+        return bookRepository.findById(idLong)
+                .orElseThrow(() -> new NotFoundException());
 
-        }
-        return book;
     }
 
     @GetMapping("/")
@@ -37,10 +39,27 @@ public class BookController {
     }
 
     @PostMapping("/")
+    @ResponseStatus(HttpStatus.CREATED)
     public Book addBook(@RequestBody Book book){
         Book savedBook=bookRepository.save(book);
         return savedBook;
     }
 
+    @PutMapping("/{id}")
+    public Book updateBook(@RequestBody Book book, @PathVariable Long id) {
+        if (book.getId() != id) {
+            throw new IdMismatchException();
+        }
+        bookRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+        return bookRepository.save(book);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        bookRepository.findById(id)
+                .orElseThrow(NotFoundException::new); //TODO ovaj operator :: provjeriti,ali msm da u tijelu lambde zove konstruktor
+        bookRepository.deleteById(id);
+    }
 
 }
