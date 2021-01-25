@@ -24,7 +24,6 @@ import { HttpClientModule } from '@angular/common/http';
     UserComponent
   ],
   imports: [
-    
     BrowserModule,
     AppRoutingModule,
     FlexLayoutModule,

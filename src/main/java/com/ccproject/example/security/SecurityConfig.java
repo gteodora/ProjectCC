@@ -12,13 +12,13 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 
-   /* @Override
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .anyRequest()
                 .permitAll()
                 .and().csrf().disable(); //allowing unrestricted access to all endpoints
-    }*/
+    }
 
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
@@ -39,7 +39,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
     }
     */
 
-
+/*
     //security based on URL
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
@@ -47,7 +47,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
         http.csrf().disable(); //TODO: csrf
         http.authorizeRequests()/*.antMatchers("/api/*").hasRole("USER")
                 .antMatchers("/admin").hasRole("ADMIN")*/
-                .anyRequest().fullyAuthenticated()
+/*                .anyRequest().fullyAuthenticated()
                 .and()
                         .formLogin()
                 .and()
@@ -56,7 +56,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .deleteCookies("JSESSIONID");
             //    .logoutSuccessHandler(logoutSuccessHandler())
     }
-
+*/
     @Bean
     public static NoOpPasswordEncoder passwordEncoder(){
         return (NoOpPasswordEncoder ) NoOpPasswordEncoder.getInstance();
