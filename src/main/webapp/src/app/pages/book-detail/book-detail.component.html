@@ -1,0 +1,36 @@
+<style>
+    .content {
+        display: flex;
+        margin: 82px auto 32px;
+        padding: 0 16px;
+        max-width: 1060px;
+        flex-direction: column;
+        align-items: center;
+      }
+    </style>
+
+
+  <div class="content" role="main" >
+    <!-- <h2>{{book.name}} - {{book.author}}</h2> -->
+
+<mat-form-field appearance="standard">
+    <mat-label>
+        Title
+    </mat-label>
+    <input matInput *ngIf="book" [(ngModel)]="book.name"> 
+    <input matInput *ngIf="!book" >
+</mat-form-field >
+<mat-form-field appearance="standard">
+    <mat-label> Author</mat-label>
+    <input matInput *ngIf="book" [(ngModel)]="book.author">
+    <input matInput *ngIf="!book" >
+</mat-form-field>
+
+<!-- <button mat-button color="primary" *ngIf="book==null" (click)="create()" routerLink="/book">Save</button>  -->
+  <button mat-button color="primary" *ngIf="book" (click)="save()" >Save</button> 
+ <a mat-icon-button color="primary" routerLink="/book" >  
+  Return
+</a>
+
+
+</div>

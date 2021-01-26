@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/book")
 public class BookController {
@@ -55,6 +56,7 @@ public class BookController {
         return bookRepository.save(book);
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         bookRepository.findById(id)

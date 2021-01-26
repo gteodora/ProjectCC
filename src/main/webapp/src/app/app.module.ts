@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuComponent } from './components/menu/menu.component';
 import { MaterialModule } from './material-module';
 import { HttpClientModule } from '@angular/common/http';
+import { BookDetailComponent } from './pages/book-detail/book-detail.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { HttpClientModule } from '@angular/common/http';
     HomeComponent,
     BookComponent,
     MenuComponent,
-    UserComponent
+    UserComponent,
+    BookDetailComponent
   ],
   imports: [
     BrowserModule,

@@ -1,28 +1,9 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { BookService } from 'src/app/services/book/book.service';
+import { Book, BookService } from 'src/app/services/book/book.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  author: string;
-}
-export interface Book {
-  id: number;
-  name: string;
-  author: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen',  author: 'H'},
-  {position: 2, name: 'Helium', author: 'He'},
-  {position: 3, name: 'Lithium', author: 'Li'},
-  {position: 4, name: 'Beryllium', author: 'Be'},
-  {position: 5, name: 'Boron', author: 'B'},
-  {position: 6, name: 'Carbon', author: 'C'},
-  {position: 7, name: 'Nitrogen', author: 'N'}
-];
+import { MaterialModule } from 'src/app/material-module';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-book',
@@ -30,32 +11,62 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./book.component.css']
 })
 export class BookComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['id', 'name', 'author'];
+  displayedColumns: string[] = ['id', 'name', 'author', 'actions'];
   //dataSource = ELEMENT_DATA;
   books:Book[];
   dataSource = new MatTableDataSource<Book>([]);
   
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
 
-  constructor(private bookService: BookService) { 
+  constructor(
+    private bookService: BookService) { 
     this.books=[];
     this.dataSource=new MatTableDataSource<Book>(this.books);
   }
 
     ngOnInit() {
-    this.bookService.getDataFromBackend().subscribe((books: Book[])=>{
+      console.log('on init')
+      this.bookService.getAllBooks().subscribe((books: Book[])=>{
       console.log(books);
       this.books = books;
       this.dataSource=new MatTableDataSource<Book>(books);
-  //    this.dataSource = new MatTableDataSource<Book>(this.books);
       this.dataSource.paginator = this.paginator;
-      console.log(this.paginator);
     }) 
   }
-  @ViewChild(MatPaginator)
-  paginator!: MatPaginator;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
+
+  delete(id: number):void{
+    Swal.fire({
+      title: 'Are you sure?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: `Yes`
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Book deleted!',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        console.log('deleting book '+id);
+        this.books = this.books.filter(book => book.id !== id);
+        this.dataSource=new MatTableDataSource<Book>(this.books);
+        this.dataSource.paginator = this.paginator;
+        this.bookService.deleteBook(id)
+        .subscribe();
+      }
+    })
+
+
+    
+  }
+
 
 }

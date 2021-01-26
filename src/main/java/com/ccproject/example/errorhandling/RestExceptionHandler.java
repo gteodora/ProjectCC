@@ -14,7 +14,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 private static final String NOT_FOUND_MESSAGE="Not found";
 
-
+//TODO: staviti da nije dostupan server, msm da je 500
+//TODO: ako je pogresna putanja error napraviti
 
     @ExceptionHandler({ NotFoundException.class })
     protected ResponseEntity<Object> handleNotFound(
