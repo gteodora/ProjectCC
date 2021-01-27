@@ -17,13 +17,13 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/user")
-
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
     Iterable<User> users=new ArrayList<User>();
     @Autowired
     UserRepository userRepository;
 
-    @RolesAllowed({"USER","ADMIN"})
+  //  @RolesAllowed({"USER","ADMIN"})
     @GetMapping("/{id}/books")
     public Set<Book> getAllReadBooks(@PathVariable String id){
         Optional<User> user=userRepository.findById(Long.parseLong(id));
@@ -33,8 +33,8 @@ public class UserController {
         //if readBooks!==null
         return readBooks;
     }
-
-    @RolesAllowed({"ADMIN"})
+//todo: put
+  //  @RolesAllowed({"ADMIN"})
     @GetMapping("/{id}")
     public  User getById(@PathVariable String id){
         //Optional<User> user=userRepository.findById(Long.parseLong(id));
@@ -43,7 +43,7 @@ public class UserController {
                 .orElseThrow(() -> new NotFoundException());
     }
 
-    @RolesAllowed({"USER","ADMIN"})
+   // @RolesAllowed({"USER","ADMIN"})
     @GetMapping("/")
     public Iterable<User> getAll(){
         users=userRepository.findAll();
@@ -51,7 +51,7 @@ public class UserController {
         return users;
     }
 
-    @RolesAllowed({"ADMIN"})
+  //  @RolesAllowed({"ADMIN"})
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public User addUser(@RequestBody User user){
@@ -59,7 +59,7 @@ public class UserController {
         return savedUser;
     }
 
-    @RolesAllowed({"ADMIN"})
+  //  @RolesAllowed({"ADMIN"})
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         userRepository.findById(id)

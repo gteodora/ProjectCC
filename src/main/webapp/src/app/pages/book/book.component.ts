@@ -4,6 +4,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MaterialModule } from 'src/app/material-module';
 import Swal from 'sweetalert2';
+import { ActivatedRoute } from '@angular/router';
+import { User, UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-book',
@@ -13,33 +15,59 @@ import Swal from 'sweetalert2';
 export class BookComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['id', 'name', 'author', 'actions'];
   //dataSource = ELEMENT_DATA;
-  books:Book[];
+  user_id?: any;
+  user: User = {
+    id: 0,
+    username: '',
+    password: '',
+    name: '',
+    surname: '',
+    email: '',
+    readBooks: []
+  };
+  books: Book[];
   dataSource = new MatTableDataSource<Book>([]);
-  
+
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
+
   constructor(
-    private bookService: BookService) { 
-    this.books=[];
-    this.dataSource=new MatTableDataSource<Book>(this.books);
+    private route: ActivatedRoute,
+    private bookService: BookService,
+    private userService: UserService) {
+    this.books = [];
+    this.dataSource = new MatTableDataSource<Book>(this.books);
   }
 
-    ngOnInit() {
-      console.log('on init')
-      this.bookService.getAllBooks().subscribe((books: Book[])=>{
-      console.log(books);
-      this.books = books;
-      this.dataSource=new MatTableDataSource<Book>(books);
-      this.dataSource.paginator = this.paginator;
-    }) 
+  ngOnInit() {
+    this.user_id = this.route.snapshot.paramMap.get('user_id')
+    // naci ovog korisnika i onda njegovo ime ispisati, kao fayon knjige koje je procitao ovaj i ovaj ako je user settovan
+    if (this.user_id) {
+      this.user_id = +this.user_id;
+      this.userService.getUserById(this.user_id).subscribe((user: User) => {
+        this.user = user
+      }, (error: any) => { console.log(error) });
+
+      this.bookService.getAllBooksByUserId(this.user_id).subscribe((books: Book[]) => {
+        this.books = books;
+        this.dataSource = new MatTableDataSource<Book>(books);
+        this.dataSource.paginator = this.paginator;
+      })
+    } else {
+      this.bookService.getAllBooks().subscribe((books: Book[]) => {
+        this.books = books;
+        this.dataSource = new MatTableDataSource<Book>(books);
+        this.dataSource.paginator = this.paginator;
+      })
+    }
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
 
-  delete(id: number):void{
+  delete(id: number): void {
     Swal.fire({
       title: 'Are you sure?',
       icon: 'warning',
@@ -55,17 +83,17 @@ export class BookComponent implements OnInit, AfterViewInit {
           showConfirmButton: false,
           timer: 1500
         })
-        console.log('deleting book '+id);
+        console.log('deleting book ' + id);
         this.books = this.books.filter(book => book.id !== id);
-        this.dataSource=new MatTableDataSource<Book>(this.books);
+        this.dataSource = new MatTableDataSource<Book>(this.books);
         this.dataSource.paginator = this.paginator;
         this.bookService.deleteBook(id)
-        .subscribe();
+          .subscribe();
       }
     })
 
 
-    
+
   }
 
 

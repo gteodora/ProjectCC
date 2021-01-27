@@ -14,6 +14,7 @@ import { MenuComponent } from './components/menu/menu.component';
 import { MaterialModule } from './material-module';
 import { HttpClientModule } from '@angular/common/http';
 import { BookDetailComponent } from './pages/book-detail/book-detail.component';
+import { UserDetailComponent } from './pages/user-detail/user-detail.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { BookDetailComponent } from './pages/book-detail/book-detail.component';
     BookComponent,
     MenuComponent,
     UserComponent,
-    BookDetailComponent
+    BookDetailComponent,
+    UserDetailComponent
   ],
   imports: [
     BrowserModule,

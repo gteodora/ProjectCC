@@ -1,0 +1,38 @@
+<p>user-detail works!</p>
+
+
+<style>
+    .content {
+        display: flex;
+        margin: 82px auto 32px;
+        padding: 0 16px;
+        max-width: 1060px;
+        flex-direction: column;
+        align-items: center;
+      }
+    </style>
+
+
+  <div class="content" role="main" >
+    <h2>{{user.username}} </h2>
+ 
+<mat-form-field appearance="standard">
+    <mat-label>
+        username
+    </mat-label>
+    <input matInput *ngIf="user" [(ngModel)]="user.username"> 
+   
+</mat-form-field >
+<mat-form-field appearance="standard">
+    <mat-label> password</mat-label>
+    <input matInput *ngIf="user" [(ngModel)]="user.password">
+  
+</mat-form-field>
+
+  <button mat-button color="primary" *ngIf="user" (click)="save()" >Save</button> 
+ <a mat-icon-button color="primary" routerLink="/user" >  
+  Return
+</a> 
+
+
+</div>

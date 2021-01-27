@@ -20,6 +20,7 @@ export interface Book {
 export class BookService {
   
   public BOOK_URL = 'http://localhost:8080/api/book/';
+  public USER_URL = 'http://localhost:8080/api/user/';
   httpOptions={
     headers: new HttpHeaders({ 
       'ContentType': 'aplication/json'
@@ -79,6 +80,14 @@ export class BookService {
       );
     }
 
+    getAllBooksByUserId(userId:number) : Observable<Book[]>{
+      const url=`${this.USER_URL}${userId}/books`;
+      return this.httpClient.get<Book[]>(url)
+      .pipe(
+        tap(_ => this.log('fetched books')),
+        catchError(this.handleError<Book[]>('getAllBooks', []))
+      );
+  }
   /**
    * Handle Http operation that failed.
    * Let the app continue.
