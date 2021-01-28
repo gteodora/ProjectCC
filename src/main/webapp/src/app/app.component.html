@@ -48,78 +48,117 @@ margin: 0 16px;
 opacity: 0.8;
 }
 -->
-<style> 
-.spacer {
-flex: 1;
-}
+<style>
+  .spacer {
+    flex: 1;
+  }
+
+
+  .card svg.material-icons path {
+    fill: #888;
+  }
+
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 16px;
+  }
+
+  .card {
+    border-radius: 4px;
+    border: 1px solid #eee;
+    background-color: #fafafa;
+    height: 40px;
+    width: 200px;
+    margin: 0 8px 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+    line-height: 24px;
+  }
+
+  .card-container .card:not(:last-child) {
+    margin-right: 0;
+  }
+
+  .card.card-small {
+    height: 16px;
+    width: 168px;
+  }
+
+  .card-container .card:not(.highlight-card) {
+    cursor: pointer;
+  }
+
+  .card-container .card:not(.highlight-card):hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
+  }
+
+  .card-container .card:not(.highlight-card):hover .material-icons path {
+    fill: rgb(105, 103, 103);
+  }
+
+  .card.highlight-card {
+    background-color: #1976d2;
+    color: white;
+    font-weight: 600;
+    border: none;
+    width: auto;
+    min-width: 30%;
+    position: relative;
+  }
+
+  .card.card.highlight-card span {
+    margin-left: 60px;
+  }
 </style>
-<!-- Toolbar -->
-<!-- 
-<div class="toolbar" role="banner">
-  <img
-  width="40"
-  alt="Angular Logo"
-  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNIIMrHrysvNUi9vjgrvrLeaskUj78_rAsjw&usqp=CAU"
-  />
-  <!--src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg=="
-  -->
-  <!-- 
-  <nav>
-  <a routerLink="/home" routerLinkActive="active" style=" color:white; text-indent: 1em;">Home</a>
-  <a routerLink="/test1" routerLinkActive="active" style=" color:white; text-indent: 1em;">Test1</a>
-  <a routerLink="/user"  routerLinkActive="active" style=" color:white; text-indent: 1em;">Users</a>
-  <a routerLink="/book"  routerLinkActive="active" style=" color:white; text-indent: 1em;">Books</a>
-  <a routerLink="/about"  routerLinkActive="active"  style=" color:white; text-indent: 1em;"> About</a> 
-  <a routerLink="/contact"  routerLinkActive="active"  style="color:white; text-indent: 1em;">Contact</a>
-  </nav>
-  <div class="spacer"></div>
-  <nav>
-  <a routerLink="/login" title="Log in" style=" color:white; text-indent: 1em;">Log in</a>
-  <a routerLink="/signin" title="Sign in" style="color:white; text-indent: 1em;">Sign in</a>
-  </nav>
-  
- 
-  </div>
 
--->
 
-<mat-toolbar color="primary" role="banner"  class="toolbar">
- 
-  <mat-toolbar-row layout-gt-xs>
-   
+
+
+<!-- Ako je korisnik NIJE prijavljen na sistem:-->
+<div *ngIf="!isLoggedIn" class="card-container">
+  <nav>
+    <button class="card" mat-button  routerLink="/register">Register</button>
+    <button class="card" mat-button  >Log in</button>
+  </nav>
+</div>
+
+<div *ngIf="isLoggedIn">
+  <mat-toolbar color="primary" role="banner" class="toolbar">
+
+    <mat-toolbar-row layout-gt-xs>
+
       <nav>
         <button mat-button routerLink="/home">Home</button>
         <button mat-button routerLink="/user">Users</button>
         <button mat-button routerLink="/book">Books</button>
         <button mat-button routerLink="/about">About</button>
         <button mat-button routerLink="/contact">Contact</button>
-        </nav>  
-        <div class="spacer"></div>
-        <nav>
-          <!-- Ako je korisnik NIJE prijavljen na sistem:-->
-          <button mat-button routerLink="/signin">Sign in</button> 
-        <button mat-button routerLink="/login">Log in</button>
+      </nav>
+      <div class="spacer"></div>
+      <nav>
+
         <!-- Ako je korisnik prijavljen na sistem:-->
         <button mat-button routerLink="/profile">Edit profile</button>
-        <button mat-button routerLink="/logout">Log out</button>
-        
-        </nav>
-        
-  </mat-toolbar-row>
-  <mat-toolbar-row *ngIf="deviceXs">
-    <span> ovo ako je xs </span>
-  </mat-toolbar-row>
-</mat-toolbar>
+        <a mat-button  routerLink="/" (click)="handleLogout()">Logout</a>
+        <!-- <button mat-button routerLink="/logout">Log out</button> -->
 
- 
+      </nav>
 
+    </mat-toolbar-row>
+    <mat-toolbar-row *ngIf="deviceXs">
+      <span> ovo ako je xs </span>
+    </mat-toolbar-row>
+  </mat-toolbar>
 
 
-  
+</div>
 
-
-
-<router-outlet ></router-outlet>
-
-
+<router-outlet></router-outlet>
 <!--  #outlet="outlet"-->

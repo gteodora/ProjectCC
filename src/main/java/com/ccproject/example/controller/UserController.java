@@ -17,7 +17,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
     Iterable<User> users=new ArrayList<User>();
     @Autowired

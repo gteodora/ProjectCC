@@ -19,7 +19,7 @@ export interface Book {
 
 export class BookService {
   
-  public BOOK_URL = 'http://localhost:8080/api/book/';
+  public BOOK_URL = 'http://localhost:8080/api/book/'; //TODO: losa praksa je ovo
   public USER_URL = 'http://localhost:8080/api/user/';
   httpOptions={
     headers: new HttpHeaders({ 
