@@ -31,4 +31,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     void deleteAll();
 
+    User findByUsername(String username);
 }

@@ -24,9 +24,11 @@ export class LoginComponent implements OnInit {
     console.log('login clicked');
     console.log('credentials:', this.credentials)
     this.app.authenticate(this.credentials, () => {
-      console.log('navigacija')
-        this.router.navigateByUrl('user');
+      this.router.navigateByUrl('home');
+
     });
+    // console.log('aaaaaaa')
+
    // this.app.authenticate(this.credentials);
   
   }

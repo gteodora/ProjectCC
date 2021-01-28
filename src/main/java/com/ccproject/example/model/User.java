@@ -1,18 +1,22 @@
 package com.ccproject.example.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Set;
 
 @Entity
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username="";
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password="";
     private String email="";
-    private String salt="";
     private  String name="";
     private String surname="";
     // private Timestamp createdDate="";
@@ -25,12 +29,22 @@ public class User {
 
     private Set<Book> readBooks;
 
+    @Transient
+    private String passwordConfirm;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_has_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
+/*
     public User(){
         username="username";
         password="password";
         name="tea";
     }
-
+*/
     public Set<Book> getReadBooks() {
         return readBooks;
     }
@@ -58,7 +72,13 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
 
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
+    }
     public String getEmail() {
         return email;
     }
@@ -67,13 +87,6 @@ public class User {
         this.email = email;
     }
 
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
 
     public String getName() {
         return name;
@@ -91,7 +104,13 @@ public class User {
         this.surname = surname;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
 
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 
 }
 

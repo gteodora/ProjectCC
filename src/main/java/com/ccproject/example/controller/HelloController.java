@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class HelloController /*extends WebSecurityConfigurerAdapter */{
 
-    @RequestMapping("/")
+    @RequestMapping("")
     public String index() {
         return "Greetings from Spring Boot!";
     }

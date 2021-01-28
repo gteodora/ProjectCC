@@ -6,6 +6,7 @@ import { AppComponent } from 'src/app/app.component';
 import { User } from '../user/user.service';
 
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
@@ -18,7 +19,8 @@ export class AppService {
   authenticated=false;
 
   constructor(private httpClient: HttpClient,
-    private location: Location) { }
+    private location: Location,
+    private router: Router) { }
 
   authenticate(credentials:any, callback: any){
     const headers = new HttpHeaders(credentials ? {
@@ -29,12 +31,10 @@ export class AppService {
       (data:any)=> 
     {
       // window.location.reload()
-      console.log(data);
       this.username=credentials.username;
       this.password=credentials.password;
       this.registerSuccessfulLogin(this.username, this.password);
-      //this.location.reload();
-     
+      callback()
     }
     );
     

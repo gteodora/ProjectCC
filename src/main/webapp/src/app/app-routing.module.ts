@@ -7,8 +7,10 @@ import { BookDetailComponent } from './pages/book-detail/book-detail.component';
 import { UserComponent } from './pages/user/user.component';
 import { UserDetailComponent } from './pages/user-detail/user-detail.component';
 import { LoginComponent } from './pages/login/login.component';
+import { AppComponent } from './app.component';
 
 const routes: Routes = [
+  {path: 'app', component: AppComponent},
   { path: '', pathMatch: 'full', redirectTo: 'login'},
   {path: 'login', component: LoginComponent},
   {path: 'logout', component: LoginComponent},

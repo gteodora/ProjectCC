@@ -1,5 +1,32 @@
-<div role="banner"> 
-<p>login works!</p>
+<style>
+    .content {
+        display: flex;
+        margin: 82px auto 32px;
+        padding: 0 16px;
+        max-width: 1060px;
+        flex-direction: column;
+        align-items: center;
+      }
+    </style>
 
-<button mat-button color="primary" routerLink="/home" (click)="login()" >Login</button> 
+<div class="content" role="banner"> 
+    
+
+<mat-form-field appearance="standard">
+    <mat-label>
+        Username
+    </mat-label>
+    <input matInput  [(ngModel)]="credentials.username">
+</mat-form-field >
+
+<mat-form-field appearance="standard">
+    <mat-label>
+        Password
+    </mat-label>
+    <input matInput  [(ngModel)]="credentials.password"> 
+</mat-form-field >
+
+<button mat-button color="primary" (click)="login()" >Login</button> 
+<mat-divider style="width: 25%"></mat-divider>
+<button mat-button color="primary"  class="card" mat-button  routerLink="/register">Register</button>
 </div>
