@@ -1,10 +1,7 @@
 package com.ccproject.example.model;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Set;
 
 @Entity
@@ -38,13 +35,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
-/*
-    public User(){
-        username="username";
-        password="password";
-        name="tea";
-    }
-*/
+
     public Set<Book> getReadBooks() {
         return readBooks;
     }
@@ -86,7 +77,6 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
 
     public String getName() {
         return name;

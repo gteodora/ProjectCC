@@ -1,69 +1,69 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AppComponent } from 'src/app/app.component';
-import { User } from '../user/user.service';
-
-import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
+import { User } from 'src/app/model/user';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AppService {
-  // BASE_PATH: 'http://localhost:8080'     //public URL:string = "http://localhost:8080/api/users";
-  USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser'
-
-  public username: string='';
-  public password: string='';
-  authenticated=false;
+  /////  public user: Observable<User>;
+  public user: BehaviorSubject<any>=new BehaviorSubject<any>(null);
+  authdata!: string;
+  public isAuthentificated: boolean = false;
 
   constructor(private httpClient: HttpClient,
-    private location: Location,
-    private router: Router) { }
+    private router: Router) {
+      //this.isLogedIn=new BehaviorSubject<Boolean>(JSON.parse(localStorage.getItem('user')));
+  }
 
-  authenticate(credentials:any, callback: any){
-    const headers = new HttpHeaders(credentials ? {
-      authorization : 'Basic ' + btoa(credentials.username + ':' + credentials.password)
-    } : {});
-
-    return this.httpClient.get("http://localhost:8080/api/user/", {headers}).subscribe(
-      (data:any)=> 
-    {
-      // window.location.reload()
-      this.username=credentials.username;
-      this.password=credentials.password;
-      this.registerSuccessfulLogin(this.username, this.password);
-      callback()
+  authenticate(username: string, password: string, fromApp?: boolean) {
+    const locSt = localStorage.getItem('user')
+    if(fromApp && locSt) {
+      return this.httpClient.get(`${environment.apiUrl}/auth/auth`, {headers: new HttpHeaders({
+        authorization: 'Basic ' + locSt
+      })})
+      .pipe(map((user: any) => {
+        this.user.next(user);
+        this.isAuthentificated = true;
+        // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
+        user.authdata = window.btoa(username + ':' + password);
+        sessionStorage.setItem('user', JSON.stringify(this.authdata));
+        return user;
+      }));
     }
-    );
-    
-    // .pipe(map((res)=> {
-    //   console.log('pipe')
-      // this.username=credentials.username;
-      // this.password=credentials.password;
-      // this.registerSuccessfulLogin(this.username, this.password);
-    // }))
-  }
-  /* */
-  registerSuccessfulLogin(username:string, password:string) {
-    console.log('setovan session storage')
-    sessionStorage.setItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME, username);
-  }
-  logout() {
-    return this.httpClient.get("http://localhost:8080/logout").subscribe(
-      (data:any)=> {
+   this.authdata = btoa(username + ':' + password);
+    const headers = new HttpHeaders({
+      authorization: 'Basic ' + this.authdata
+    });
 
-    })
-    sessionStorage.removeItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME);
-    this.username = '';
-    this.password = '';
-
+    return this.httpClient.get(`${environment.apiUrl}/auth/auth`, { headers })
+      .pipe(map((user: any) => {
+        this.user.next(user);
+        this.isAuthentificated = true;
+        // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
+        user.authdata = window.btoa(username + ':' + password);
+        sessionStorage.setItem('user', JSON.stringify(this.authdata));
+        return user;
+      }));
   }
-  isUserLoggedIn(){
-    let user = sessionStorage.getItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME)
-    console.log('is user logged in',user)
+  logout(callback: Function) {
+    this.isAuthentificated = false;
+    this.user.next(null)
+    callback()
+  }
+
+  isUserLoggedIn() {
+    return this.user ? this.user : null
+    let user = sessionStorage.getItem('user')
     if (user === null) return false
     return true
   }
 }
+
+
+
+

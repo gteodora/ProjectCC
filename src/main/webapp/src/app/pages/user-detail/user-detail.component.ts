@@ -7,7 +7,8 @@ import { MatFormFieldModule} from '@angular/material/form-field';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
-import { User, UserService } from 'src/app/services/user/user.service';
+import { UserService } from 'src/app/services/user/user.service';
+import { User } from 'src/app/model/user';
 
 
 
@@ -35,7 +36,6 @@ isEdit?: boolean;
 
   getBook():void{
     let id : any = this.route.snapshot.paramMap.get('id') 
-    console.log(id);
     
     if(id==='add'){
       this.isEdit = false;
@@ -52,17 +52,13 @@ isEdit?: boolean;
       this.isEdit = true;
       id = +id;
       this.userService.getUserById(id)
-      .subscribe(user => this.user = user, error => {console.log(error)});
-  
+      .subscribe(user => this.user = user);
     }
-    
-
   }
 
   save():void{
     
     if(this.isEdit===true){
-      console.log('uslo u edit', this.user)
       this.userService.updateUser(this.user)
        .subscribe(()=>this.location.back());
       
@@ -70,7 +66,6 @@ isEdit?: boolean;
      // this.book.id=null;
       this.userService.createUser(this.user)
        .subscribe(()=>this.location.back());
-
     }
     Swal.fire({
       position: 'top-end',
@@ -80,6 +75,5 @@ isEdit?: boolean;
       timer: 1500
     })
   }
-  
 
 }

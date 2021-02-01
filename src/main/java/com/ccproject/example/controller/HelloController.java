@@ -7,15 +7,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+// @CrossOrigin(   origins = "*",  allowedHeaders = "*")  //, allowCredentials = "true"
+@RestController
+@RequestMapping("")
 public class HelloController /*extends WebSecurityConfigurerAdapter */{
 
     @RequestMapping("")
@@ -47,4 +48,6 @@ public class HelloController /*extends WebSecurityConfigurerAdapter */{
         return "redirect:/login?logout";
      //   return "redirect:/login?logout"; //You can redirect wherever you want, but generally it's a good practice to show login screen again.
     }*/
+
+
 }

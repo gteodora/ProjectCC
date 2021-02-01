@@ -1,11 +1,12 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Book, BookService } from 'src/app/services/book/book.service';
+import { BookService } from 'src/app/services/book/book.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { MaterialModule } from 'src/app/material-module';
 import Swal from 'sweetalert2';
 import { ActivatedRoute } from '@angular/router';
-import { User, UserService } from 'src/app/services/user/user.service';
+import { UserService } from 'src/app/services/user/user.service';
+import { User } from 'src/app/model/user';
+import { Book } from 'src/app/model/book';
 
 @Component({
   selector: 'app-book',
@@ -14,7 +15,6 @@ import { User, UserService } from 'src/app/services/user/user.service';
 })
 export class BookComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['id', 'name', 'author', 'actions'];
-  //dataSource = ELEMENT_DATA;
   user_id?: any;
   user: User = {
     id: 0,
@@ -31,7 +31,6 @@ export class BookComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-
   constructor(
     private route: ActivatedRoute,
     private bookService: BookService,
@@ -42,12 +41,11 @@ export class BookComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.user_id = this.route.snapshot.paramMap.get('user_id')
-    // naci ovog korisnika i onda njegovo ime ispisati, kao fayon knjige koje je procitao ovaj i ovaj ako je user settovan
     if (this.user_id) {
       this.user_id = +this.user_id;
       this.userService.getUserById(this.user_id).subscribe((user: User) => {
         this.user = user
-      }, (error: any) => { console.log(error) });
+      });
 
       this.bookService.getAllBooksByUserId(this.user_id).subscribe((books: Book[]) => {
         this.books = books;
@@ -83,7 +81,6 @@ export class BookComponent implements OnInit, AfterViewInit {
           showConfirmButton: false,
           timer: 1500
         })
-        console.log('deleting book ' + id);
         this.books = this.books.filter(book => book.id !== id);
         this.dataSource = new MatTableDataSource<Book>(this.books);
         this.dataSource.paginator = this.paginator;
@@ -91,10 +88,5 @@ export class BookComponent implements OnInit, AfterViewInit {
           .subscribe();
       }
     })
-
-
-
   }
-
-
 }

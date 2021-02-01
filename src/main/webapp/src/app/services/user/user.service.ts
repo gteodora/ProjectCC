@@ -4,20 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { MessageService } from '../message/message.service';
 import Swal from 'sweetalert2';
-import { Book } from '../book/book.service';
-
-
-
-export interface User {
-  id?: number;
-  name: string;
-  surname: string;
-  email: string;
-  username: string;
-  password: string;
-  readBooks: Book[];
-  //..
-}
+import { User } from 'src/app/model/user';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +24,7 @@ export class UserService {
 
     /** GET users from the server */
   public getAllUsers(): Observable<User[]>{
-      return this.httpClient.get<User[]>(this.USER_URL)
+      return this.httpClient.get<User[]>(this.USER_URL ,{withCredentials:true})
       .pipe(
         tap(_ => this.log('fetched users')),
         catchError(this.handleError<User[]>('getAllUsers', []))
@@ -57,8 +44,7 @@ export class UserService {
     /** GET user by id. Will 404 if id not found */
     public getUserById(id : number): Observable<User> {
       const url=`${this.USER_URL}${id}`;
-      console.log(this.httpClient.get<User>(url));
-      return this.httpClient.get<any>(url)
+      return this.httpClient.get<any>(url, {withCredentials:true})
       .pipe(
         tap(_ => this.log(`fetched user id=${id}`)),
         catchError(this.handleError<User>(`getUserById id=${id}`))
@@ -67,18 +53,15 @@ export class UserService {
 
     /** POST: add a new user to the server */
     createUser(user: User): Observable<User> {
-      console.log('uslo', user.id)
       return this.httpClient.post<User>(this.USER_URL, user, this.httpOptions)
       .pipe(
         tap((newUser: User) => {this.log(`added user w/ id=${newUser.id}`) 
-      console.log(newUser)
       }),
         catchError(this.handleError<User>('addUser'))
       );
     }
      /** PUT: update the user on the server */
     updateUser(user: User) : Observable<any> {
-      console.log('uslo u edit2', user)
       const url=`${this.USER_URL}${user.id}`;
       return this.httpClient.put(url, user, this.httpOptions).
       pipe(
