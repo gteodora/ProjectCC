@@ -1,125 +1,35 @@
-<!--
 <style>
-  :host {
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-font-size: 14px;
-color: #333;
-box-sizing: border-box;
--webkit-font-smoothing: antialiased;
--moz-osx-font-smoothing: grayscale;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-margin: 8px 0;
-}
-
-p {
-margin: 0;
-}
-
-.toolbar {
-position: absolute;
-top: 0;
-left: 0;
-right: 0;
-height: 60px;
-display: flex;
-align-items: center;
-background-color: #1976d2;
-color: white;
-font-weight: 600;
-}
-
-.toolbar img {
-margin: 0 16px;
-}
-
-.toolbar #twitter-logo {
-height: 40px;
-margin: 0 16px;
-}
-
-.toolbar #twitter-logo:hover {
-opacity: 0.8;
-}
--->
-<style> 
-.spacer {
-flex: 1;
-}
+  .spacer {
+    flex: 1;
+  }
 </style>
-<!-- Toolbar -->
-<!-- 
-<div class="toolbar" role="banner">
-  <img
-  width="40"
-  alt="Angular Logo"
-  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNIIMrHrysvNUi9vjgrvrLeaskUj78_rAsjw&usqp=CAU"
-  />
-  <!--src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg=="
-  -->
-  <!-- 
-  <nav>
-  <a routerLink="/home" routerLinkActive="active" style=" color:white; text-indent: 1em;">Home</a>
-  <a routerLink="/test1" routerLinkActive="active" style=" color:white; text-indent: 1em;">Test1</a>
-  <a routerLink="/user"  routerLinkActive="active" style=" color:white; text-indent: 1em;">Users</a>
-  <a routerLink="/book"  routerLinkActive="active" style=" color:white; text-indent: 1em;">Books</a>
-  <a routerLink="/about"  routerLinkActive="active"  style=" color:white; text-indent: 1em;"> About</a> 
-  <a routerLink="/contact"  routerLinkActive="active"  style="color:white; text-indent: 1em;">Contact</a>
-  </nav>
-  <div class="spacer"></div>
-  <nav>
-  <a routerLink="/login" title="Log in" style=" color:white; text-indent: 1em;">Log in</a>
-  <a routerLink="/signin" title="Sign in" style="color:white; text-indent: 1em;">Sign in</a>
-  </nav>
-  
- 
-  </div>
 
--->
-
-<mat-toolbar color="primary" role="banner"  class="toolbar">
- 
-  <mat-toolbar-row layout-gt-xs>
-   
+<div *ngIf="user">
+  <mat-toolbar color="primary" role="banner" class="toolbar">
+    <mat-toolbar-row layout-gt-xs>
       <nav>
-        <button mat-button routerLink="/home">Home</button>
+        <button mat-button routerLink="/home">
+          <mat-icon>home</mat-icon>
+        </button>
         <button mat-button routerLink="/user">Users</button>
         <button mat-button routerLink="/book">Books</button>
         <button mat-button routerLink="/about">About</button>
-        <button mat-button routerLink="/contact">Contact</button>
-        </nav>  
-        <div class="spacer"></div>
-        <nav>
-          <!-- Ako je korisnik NIJE prijavljen na sistem:-->
-          <button mat-button routerLink="/signin">Sign in</button> 
-        <button mat-button routerLink="/login">Log in</button>
-        <!-- Ako je korisnik prijavljen na sistem:-->
-        <button mat-button routerLink="/profile">Edit profile</button>
-        <button mat-button routerLink="/logout">Log out</button>
-        
-        </nav>
-        
-  </mat-toolbar-row>
-  <mat-toolbar-row *ngIf="deviceXs">
-    <span> ovo ako je xs </span>
-  </mat-toolbar-row>
-</mat-toolbar>
+      </nav>
+      <div class="spacer"></div>
+      <nav >
+        <a mat-button (click)="handleLogout()" fxHide.xs="true" >Logout
+          <mat-icon>logout</mat-icon>
+        </a>
+      </nav>
 
- 
-
-
-
-  
-
-
-
-<router-outlet ></router-outlet>
-
-
-<!--  #outlet="outlet"-->
+    </mat-toolbar-row>
+    <mat-toolbar-row *ngIf="deviceXs">
+      <nav >
+        <a mat-button (click)="handleLogout()" fxShow.xs="true" >Logout
+          <mat-icon>logout</mat-icon>
+        </a>
+      </nav>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</div>
+<router-outlet></router-outlet>

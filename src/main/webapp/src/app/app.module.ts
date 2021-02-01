@@ -10,11 +10,13 @@ import { UserComponent } from './pages/user/user.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MenuComponent } from './components/menu/menu.component';
 import { MaterialModule } from './material-module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BookDetailComponent } from './pages/book-detail/book-detail.component';
 import { UserDetailComponent } from './pages/user-detail/user-detail.component';
+import { AppService } from './services/app-service/app.service';
+import { AboutComponent } from './pages/about/about.component';
+import { BasicAuthInterceptor } from './util/basic-auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -22,10 +24,10 @@ import { UserDetailComponent } from './pages/user-detail/user-detail.component';
     LoginComponent,
     HomeComponent,
     BookComponent,
-    MenuComponent,
     UserComponent,
     BookDetailComponent,
-    UserDetailComponent
+    UserDetailComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +39,9 @@ import { UserDetailComponent } from './pages/user-detail/user-detail.component';
     MaterialModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [AppService,
+    { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true } 
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

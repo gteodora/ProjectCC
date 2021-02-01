@@ -4,17 +4,26 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import javax.annotation.security.RolesAllowed;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+// @CrossOrigin(   origins = "*",  allowedHeaders = "*")  //, allowCredentials = "true"
 @RestController
+@RequestMapping("")
 public class HelloController /*extends WebSecurityConfigurerAdapter */{
 
-    @RequestMapping("/proba")
+    @RequestMapping("")
     public String index() {
         return "Greetings from Spring Boot!";
     }
+
     @RolesAllowed("USER")
     @RequestMapping("/api")
     public String getUser()
@@ -28,5 +37,17 @@ public class HelloController /*extends WebSecurityConfigurerAdapter */{
     {
         return "Welcome Admin";
     }
+
+/*
+    @RequestMapping(value="/logout", method = RequestMethod.GET)
+    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null){
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return "redirect:/login?logout";
+     //   return "redirect:/login?logout"; //You can redirect wherever you want, but generally it's a good practice to show login screen again.
+    }*/
+
 
 }

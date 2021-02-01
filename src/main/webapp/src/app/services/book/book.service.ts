@@ -4,25 +4,18 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { MessageService } from '../message/message.service';
 import Swal from 'sweetalert2';
-
-
-
-export interface Book {
-  id?: number;
-  name: string;
-  author: string;
-}
+import { Book } from 'src/app/model/book';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class BookService {
-  
-  public BOOK_URL = 'http://localhost:8080/api/book/';
+
+  public BOOK_URL = 'http://localhost:8080/api/book/'; //TODO: naraviti base URL
   public USER_URL = 'http://localhost:8080/api/user/';
   httpOptions={
-    headers: new HttpHeaders({ 
+    headers: new HttpHeaders({
       'ContentType': 'aplication/json'
     })
   };
@@ -32,7 +25,7 @@ export class BookService {
 
     /** GET books from the server */
   public getAllBooks(): Observable<Book[]>{
-      return this.httpClient.get<Book[]>(this.BOOK_URL)
+      return this.httpClient.get<Book[]>(this.BOOK_URL,{withCredentials:true})
       .pipe(
         tap(_ => this.log('fetched books')),
         catchError(this.handleError<Book[]>('getAllBooks', []))
@@ -61,11 +54,9 @@ export class BookService {
 
     /** POST: add a new book to the server */
     createBook(book: Book): Observable<Book> {
-      console.log('uslo', book.id)
       return this.httpClient.post<Book>(this.BOOK_URL, book, this.httpOptions)
       .pipe(
-        tap((newBook: Book) => {this.log(`added book w/ id=${newBook.id}`) 
-      console.log(newBook)
+        tap((newBook: Book) => {this.log(`added book w/ id=${newBook.id}`)
       }),
         catchError(this.handleError<Book>('addBook'))
       );
@@ -82,7 +73,7 @@ export class BookService {
 
     getAllBooksByUserId(userId:number) : Observable<Book[]>{
       const url=`${this.USER_URL}${userId}/books`;
-      return this.httpClient.get<Book[]>(url)
+      return this.httpClient.get<Book[]>(url,{withCredentials:true})
       .pipe(
         tap(_ => this.log('fetched books')),
         catchError(this.handleError<Book[]>('getAllBooks', []))

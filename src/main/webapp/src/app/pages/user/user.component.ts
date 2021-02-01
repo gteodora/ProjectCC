@@ -4,7 +4,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MaterialModule } from 'src/app/material-module';
 import Swal from 'sweetalert2';
-import { User, UserService } from 'src/app/services/user/user.service';
+import { UserService } from 'src/app/services/user/user.service';
+import { User } from 'src/app/model/user';
 
 @Component({
   selector: 'app-user',
@@ -12,7 +13,7 @@ import { User, UserService } from 'src/app/services/user/user.service';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['id', 'name', 'surname','username', 'password', 'email', 'actions']; 
+  displayedColumns: string[] = ['id', 'name', 'surname','username', 'email', 'actions']; 
   // ,'surname', 'username', 'email','password','actions'
   //dataSource = ELEMENT_DATA;
   users:User[];
@@ -28,9 +29,7 @@ export class UserComponent implements OnInit, AfterViewInit {
   }
 
     ngOnInit() {
-      console.log('on init')
       this.userService.getAllUsers().subscribe((users: User[])=>{
-      console.log(users);
       this.users = users;
       this.dataSource=new MatTableDataSource<User>(users);
       this.dataSource.paginator = this.paginator;
@@ -57,7 +56,6 @@ export class UserComponent implements OnInit, AfterViewInit {
           showConfirmButton: false,
           timer: 1500
         })
-        console.log('deleting user '+id);
         this.users = this.users.filter(user => user.id !== id);
         this.dataSource=new MatTableDataSource<User>(this.users);
         this.dataSource.paginator = this.paginator;

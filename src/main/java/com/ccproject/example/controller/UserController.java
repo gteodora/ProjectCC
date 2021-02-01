@@ -1,24 +1,22 @@
 package com.ccproject.example.controller;
-
 import com.ccproject.example.errorhandling.NotFoundException;
 import com.ccproject.example.model.Book;
 import com.ccproject.example.model.User;
 import com.ccproject.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.security.RolesAllowed;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     Iterable<User> users=new ArrayList<User>();
     @Autowired
     UserRepository userRepository;
@@ -55,6 +53,7 @@ public class UserController {
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public User addUser(@RequestBody User user){
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         User savedUser=userRepository.save(user);
         return savedUser;
     }
@@ -66,5 +65,6 @@ public class UserController {
                 .orElseThrow(NotFoundException::new);
         userRepository.deleteById(id);
     }
-
+//    @Autowired
+//    private UserService userService;
 }

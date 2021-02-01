@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {MaterialModule} from '../../material-module';
 import { MatFormFieldModule} from '@angular/material/form-field';
-import { Book, BookService } from 'src/app/services/book/book.service';
+import { BookService } from 'src/app/services/book/book.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
+import { Book } from 'src/app/model/book';
 
 
 
@@ -32,7 +33,6 @@ isEdit?: boolean;
 
   getBook():void{
     let id : any = this.route.snapshot.paramMap.get('id') 
-    console.log(id);
     
     if(id==='add'){
       this.isEdit = false;
@@ -45,7 +45,7 @@ isEdit?: boolean;
       this.isEdit = true;
       id = +id;
       this.bookService.getBookById(id)
-      .subscribe(book => this.book = book, error => {console.log(error)});
+      .subscribe(book => this.book = book);
   
     }
     

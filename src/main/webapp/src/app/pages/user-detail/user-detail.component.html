@@ -1,5 +1,3 @@
-<p>user-detail works!</p>
-
 
 <style>
     .content {
@@ -21,13 +19,33 @@
         username
     </mat-label>
     <input matInput *ngIf="user" [(ngModel)]="user.username"> 
-   
 </mat-form-field >
+
 <mat-form-field appearance="standard">
     <mat-label> password</mat-label>
     <input matInput *ngIf="user" [(ngModel)]="user.password">
-  
 </mat-form-field>
+
+<mat-form-field appearance="standard">
+  <mat-label>
+      Name
+  </mat-label>
+  <input matInput *ngIf="user" [(ngModel)]="user.name"> 
+</mat-form-field >
+
+<mat-form-field appearance="standard">
+  <mat-label>
+      Surname
+  </mat-label>
+  <input matInput *ngIf="user" [(ngModel)]="user.surname"> 
+</mat-form-field >
+
+<mat-form-field appearance="standard">
+  <mat-label>
+      Email
+  </mat-label>
+  <input matInput *ngIf="user" [(ngModel)]="user.email"> 
+</mat-form-field >
 
   <button mat-button color="primary" *ngIf="user" (click)="save()" >Save</button> 
  <a mat-icon-button color="primary" routerLink="/user" >  
